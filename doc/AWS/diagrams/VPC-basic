@@ -1,0 +1,56 @@
+graph TD;
+
+  subgraph AWS-VPC[VPC: Virtual Private Cloud]
+  
+    subgraph AWS-EC2-Stack1
+      PyScript1[Python Script 1]
+      MongoDB1[MongoDB 1]
+      Superset1[Superset 1]
+    end
+
+    subgraph AWS-EC2-Stack2
+      PyScript2[Python Script 2]
+      MongoDB2[MongoDB 2]
+      Superset2[Superset 2]
+    end
+
+    subgraph AWS-EC2-Stack3
+      PyScript3[Python Script 3]
+      MongoDB3[MongoDB 3]
+      Superset3[Superset 3]
+    end
+    
+    subgraph AWS-EC2-Stack4
+      PyScript4[Python Script 4]
+      MongoDB4[MongoDB 4]
+      Superset4[Superset 4]
+    end
+    
+    subgraph AWS-EC2-Overheads
+      Nginx[Nginx Reverse Proxy]
+    end
+  
+    PyScript1 --> MongoDB1
+    MongoDB1 --> Superset1
+    Superset1 --> Nginx
+    
+    PyScript2 --> MongoDB2
+    MongoDB2 --> Superset2
+    Superset2 --> Nginx
+    
+    PyScript3 --> MongoDB3
+    MongoDB3 --> Superset3
+    Superset3 --> Nginx
+
+    PyScript4 --> MongoDB4
+    MongoDB4 --> Superset4
+    Superset4 --> Nginx
+
+    Nginx --> Cloudflare
+  
+  end
+  
+  AccessPoint["Access Point (User/Client)"]
+  
+  AccessPoint -->|HTTP/HTTPS Access| Cloudflare
+
