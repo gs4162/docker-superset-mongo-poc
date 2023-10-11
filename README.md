@@ -1,4 +1,4 @@
-# Superset Mongo via Mongo BI connector
+# Superset Mongo via Mongo BI connector test
 
 This is a simple [docker-compose](./docker-compose.yaml) project to demonstrate how to query a [MongoDB](https://www.mongodb.com/try/download/community) database with [Apache Superset](https://superset.apache.org/) through the [MongoDB BI Connector](https://docs.mongodb.com/bi-connector/v2.14/).
 
