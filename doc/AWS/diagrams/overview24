@@ -1,0 +1,96 @@
+graph TD;
+
+  subgraph Site1
+    device1[IoT Device site 1]
+  end
+
+  subgraph Site2
+    device2[IoT Device site 2]
+  end
+
+  subgraph Site3
+    device3[IoT Device site 3]
+  end
+  
+  subgraph Site4
+    device4[IoT Device site 4]
+  end
+
+  subgraph AWS-IoT-Core[AWS IoT Core]
+    device1 -->|MQTT Publish| AWS_IoT_Core
+    device2 -->|MQTT Publish| AWS_IoT_Core
+    device3 -->|MQTT Publish| AWS_IoT_Core
+    device4 -->|MQTT Publish| AWS_IoT_Core
+  end
+  
+  subgraph AWS-VPC[AWS Virtual Private Cloud]
+    
+    subgraph PublicSubnet[Public Subnet]
+        IGW[Internet Gateway]
+    end
+    
+    subgraph PrivateSubnet1[Private Subnet 1]
+      PyScript1[Python Script 1]
+      MongoDB1[MongoDB 1]
+      Superset1[Superset 1]
+    end
+
+    subgraph PrivateSubnet2[Private Subnet 2]
+      PyScript2[Python Script 2]
+      MongoDB2[MongoDB 2]
+      Superset2[Superset 2]
+    end
+
+    subgraph PrivateSubnet3[Private Subnet 3]
+      PyScript3[Python Script 3]
+      MongoDB3[MongoDB 3]
+      Superset3[Superset 3]
+    end
+    
+    subgraph PrivateSubnet4[Private Subnet 4]
+      PyScript4[Python Script 4]
+      MongoDB4[MongoDB 4]
+      Superset4[Superset 4]
+    end
+    
+    NAT[NAT Gateway]
+    PrivateSubnet1 --> NAT
+    PrivateSubnet2 --> NAT
+    PrivateSubnet3 --> NAT
+    PrivateSubnet4 --> NAT
+    NAT --> IGW
+  end
+
+  subgraph ZEROtrustCloudflareClient
+    cloudflareCDNClient[Cloudflare CDN for Client]
+    client[Client Accessing Webpage via Cloudflare]
+  end
+
+  subgraph ZEROtrustCloudflareEngineer
+    cloudflareCDNEngineer[Cloudflare CDN for Engineer's Laptop]
+    EngineerLaptop[Engineer's Laptop]
+  end
+
+  AWS_IoT_Core -->|MQTT Subscribe to site1| PyScript1
+  PyScript1 --> MongoDB1
+  MongoDB1 --> Superset1
+  Superset1 --> NAT
+  
+  AWS_IoT_Core -->|MQTT Subscribe to site2| PyScript2
+  PyScript2 --> MongoDB2
+  MongoDB2 --> Superset2
+  Superset2 --> NAT
+  
+  AWS_IoT_Core -->|MQTT Subscribe to site3| PyScript3
+  PyScript3 --> MongoDB3
+  MongoDB3 --> Superset3
+  Superset3 --> NAT
+
+  AWS_IoT_Core -->|MQTT Subscribe to site4| PyScript4
+  PyScript4 --> MongoDB4
+  MongoDB4 --> Superset4
+  Superset4 --> NAT
+
+  EngineerLaptop -->|Secure Access to AWS VPC & Devices| cloudflareCDNEngineer
+  client -->|HTTP/HTTPS Access| cloudflareCDNClient
+  cloudflareCDNClient --> IGW
